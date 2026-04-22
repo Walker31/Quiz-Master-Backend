@@ -26,9 +26,14 @@ class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        print(f"DEBUG: Login attempt with data: {request.data}")
         serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            print(f"DEBUG: Login validation failed: {serializer.errors}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
         user = serializer.validated_data['user']
+        print(f"DEBUG: Login successful for user: {user.username}")
         return Response(TokenPairSerializer.get_tokens(user))
 
 

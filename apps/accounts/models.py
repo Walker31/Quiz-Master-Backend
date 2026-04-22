@@ -39,6 +39,7 @@ class Batch(BaseModel):
     Each batch is tied to a specific ExamType (e.g. JEE 2026).
     """
     name = models.CharField(max_length=100)
+    code = models.CharField(max_length=20, unique=True, null=True) # Adding null=True temporarily to make migration easy
     # exam_type FK added after content/ app is created (Phase 1.3)
     admin = models.ForeignKey(
         User,

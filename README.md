@@ -70,8 +70,7 @@ QuizMaster is a comprehensive quiz platform backend built with Django REST Frame
 
 6. **Seed database (optional):**
    ```bash
-   ./venv/bin/python manage.py shell < seed_subjects.py  # Load subjects/chapters/quizzes
-   ./venv/bin/python manage.py seed_questions             # Load JEE-level questions
+  ./venv/bin/python manage.py seed_all  # Users/admin + subjects/chapters/quizzes + questions + scores
    ```
 
 7. **Create superuser:**
@@ -134,7 +133,8 @@ Backend/
 ├── requirements.txt                   # Dependencies
 ├── .env                              # Environment configuration
 ├── .env.example                      # Environment template
-├── seed_subjects.py                  # Initial data seeding script
+├── seed_all.py                       # Shell wrapper for unified seed command
+├── seed_subjects.py                  # Legacy subject/chapter/quiz seed script
 │
 ├── quizMaster/                       # Main project settings
 │   ├── settings.py                  # Django configuration
@@ -158,6 +158,7 @@ Backend/
 │   ├── admin.py                     # Admin configuration
 │   ├── management/
 │   │   └── commands/
+│   │       ├── seed_all.py         # Unified seed command
 │   │       ├── seed_data.py        # Seed dummy data command
 │   │       └── seed_questions.py   # Seed JEE-level questions
 │   └── migrations/
@@ -469,7 +470,19 @@ SIMPLE_JWT = {
 
 ## Management Commands
 
-### 1. Seed Subjects, Chapters, and Quizzes
+### 1. Unified Seed (Recommended)
+```bash
+./venv/bin/python manage.py seed_all
+```
+**Creates:**
+- Admin user (username: admin, password: admin123)
+- Test/sample users and profiles
+- 5 subjects, 19 chapters, and chapter quizzes
+- JEE-level questions via `seed_questions`
+- Sample scores for test user
+- Idempotent (safe to run multiple times)
+
+### 2. Seed Subjects, Chapters, and Quizzes (Legacy)
 ```bash
 ./venv/bin/python manage.py shell < seed_subjects.py
 ```
@@ -479,7 +492,7 @@ SIMPLE_JWT = {
 - 38 quizzes
 - Idempotent (won't duplicate)
 
-### 2. Seed Test Data
+### 3. Seed Test Data
 ```bash
 ./venv/bin/python manage.py seed_data
 ```
@@ -488,7 +501,7 @@ SIMPLE_JWT = {
 - Admin user (username: admin, password: admin123)
 - Sample subjects, chapters, quizzes, questions, and scores
 
-### 3. Seed JEE-Level Questions
+### 4. Seed JEE-Level Questions
 ```bash
 ./venv/bin/python manage.py seed_questions
 ```

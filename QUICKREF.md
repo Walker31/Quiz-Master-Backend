@@ -26,8 +26,7 @@ nano .env
 
 # Run migrations and seed data
 python manage.py migrate
-python manage.py shell < seed_subjects.py
-python manage.py seed_questions
+python manage.py seed_all
 
 # Start server
 python manage.py runserver
@@ -119,35 +118,21 @@ created_at/updated_at  # DateTime
 - Refresh Token Lifetime: 1 day
 - Auth Header Type: Bearer
 
-## Useful Commands
+## Unified Seed Command (All-in-One)
 
 ```bash
-# Django Shell
-python manage.py shell
-
-# Check database
-python manage.py dbshell
-
-# Run migrations
-python manage.py migrate
-
-# Create migrations
-python manage.py makemigrations
-
-# List all URLs
-python manage.py show_urls
-
-# Check for issues
-python manage.py check
-
-# Create superuser
-python manage.py createsuperuser
-
-# Seed commands
-python manage.py shell < seed_subjects.py  # Load initial data
-python manage.py seed_questions             # Load JEE questions
-python manage.py seed_data                  # Load dummy data
+python manage.py seed_all
 ```
+**Creates everything with one command:**
+- Admin user (admin / admin123)
+- 3 test students
+- JEE 2026 Batch A with all students
+- 4 subjects, 18 chapters
+- ~50 sample questions with options
+- Live quiz with all subjects and questions linked
+- Quiz assignment to batch
+
+Perfect for starting fresh or resetting the database!
 
 ## Common Responses
 

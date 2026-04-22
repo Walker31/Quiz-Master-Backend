@@ -10,6 +10,9 @@ urlpatterns = [
     # ── API v1 (new architecture) ─────────────────────────────────────────────
     path('api/v1/', include('apps.accounts.urls')),
     path('api/v1/content/', include('apps.content.urls')),
+    path('api/v1/quiz/', include('apps.quiz.urls')),
+    path('api/v1/attempt/', include('apps.attempt.urls')),
+    path('api/v1/analytics/', include('apps.analytics.urls')),
 
     # ── Legacy API (kept until frontend is migrated) ──────────────────────────
     path('api/auth/', include('users.urls')),

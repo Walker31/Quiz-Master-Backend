@@ -47,11 +47,34 @@ class LoginSerializer(serializers.Serializer):
 
     def validate(self, data):
         from django.contrib.auth import authenticate
-        user = authenticate(username=data['username'], password=data['password'])
+        from .models import User
+        
+        username_or_email = data.get('username')
+        password = data.get('password')
+        
+        # Try finding by email first if it looks like an email
+        user = None
+        if '@' in username_or_email:
+            print(f"DEBUG: Attempting email lookup for: {username_or_email}")
+            try:
+                user_obj = User.objects.get(email=username_or_email)
+                username_or_email = user_obj.username
+                print(f"DEBUG: Found user {username_or_email} via email")
+            except User.DoesNotExist:
+                print(f"DEBUG: No user found with email: {username_or_email}")
+                pass
+        
+        print(f"DEBUG: Calling authenticate with username: {username_or_email}")
+        user = authenticate(username=username_or_email, password=password)
+        
         if not user:
-            raise serializers.ValidationError("Invalid credentials.")
+            print("DEBUG: authenticate() returned None")
+            raise serializers.ValidationError("Invalid username/email or password.")
+        
         if not user.is_active:
+            print(f"DEBUG: User {user.username} is not active")
             raise serializers.ValidationError("Account is disabled.")
+            
         data['user'] = user
         return data
 
