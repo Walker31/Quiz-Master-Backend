@@ -28,7 +28,7 @@ jobs:
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             set -e
 
-            cd /var/www/quiz   # your project folder
+            cd ~/Quiz-Master-Backend
 
             echo "Pull latest code..."
             git pull origin main
@@ -42,10 +42,13 @@ jobs:
             echo "Run migrations..."
             python manage.py migrate --noinput
 
+            echo "Seed database..."
+            python manage.py seed_all
+
             echo "Collect static files..."
             python manage.py collectstatic --noinput
 
-            echo "Restart systemd service..."
+            echo "Restart application service..."
             sudo systemctl restart quiz
 
             echo "Check service status..."
